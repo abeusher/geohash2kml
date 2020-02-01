@@ -1,15 +1,11 @@
-﻿#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
+﻿import sys
 import geohash
 from kml_template import header, footer, box_template, red_template, orange_template, yellow_template, green_template
 
 class KmlMaker(object):
     def __init__(self,filename):
         self.filename = filename
-        print "walking",filename
+        print("walking",filename)
         self.locations = {}
 
     def makeGoogleEarthBox(self,geo):
@@ -26,7 +22,7 @@ class KmlMaker(object):
         for line in open(self.filename,"rU"):
             (geohashcode, count) = line.strip().split("\t")
             self.locations[geohashcode] = count
-        print 'Done loading geohashcode counts.'
+        print('Done loading geohashcode counts.')
 
     def get_template(self,input_value,color_ramp=[4,7,15]):
         low = color_ramp[0]
@@ -51,7 +47,7 @@ class KmlMaker(object):
         for key,value in self.locations.items():
             value = int(value)
             if value < 1: continue
-            print key,value
+            print (key,value)
             t = box_template
             poly = self.makeGoogleEarthBox(key)
             #TODO: remove this constraint for visualization
@@ -72,7 +68,7 @@ class KmlMaker(object):
         for key,value in self.locations.items():
             value = int(value)
             if value < 1: continue
-            print key,value
+            print(key,value)
             t = self.get_template(value,color_ramp=color_ramp)
             poly = self.makeGoogleEarthBox(key)
             #TODO: remove this constraint for visualization
@@ -89,7 +85,7 @@ class KmlMaker(object):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print "Usage: python geohash2kml.py <input file> <output file>"
+        print ("Usage: python geohash2kml.py <input file> <output file>")
         sys.exit(-1)
 
     input_file = sys.argv[1]
