@@ -93,7 +93,7 @@ class SuperJsonProcessor(object):
 
     def make_statistics_table(self, output_file = ""):
         """
-        A simple table of stats.  Looks like David T. already made this!
+        A simple table of stats.  Future feature.
         """
         return
 
