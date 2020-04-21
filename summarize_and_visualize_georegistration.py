@@ -109,7 +109,7 @@ def main():
     if len (sys.argv) > 1:
         filename = sys.argv[1]
     else: 
-        filename = "enriched_Clin_1_data_drop_documents.jsonl"
+        filename = "enriched_data.jsonl"
     sjp = SuperJsonProcessor()
 
     # load the data
