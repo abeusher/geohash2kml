@@ -68,6 +68,8 @@ class SuperJsonProcessor(object):
         Save the results of self.data_table to a tsv file.
         """
         fout = open(output_file,"w", encoding="utf-8")
+        headers = "object_id, country_code, admin1, admin2, geohash_value, lat, lng, mgrs, placename, precision, confidence_level".replace(",","\t").replace(" ","")
+        fout.write(headers+"\n")
         for item in self.data_table:
             text = "\t".join(item)
             fout.write(text+"\n")
@@ -79,7 +81,7 @@ class SuperJsonProcessor(object):
         Example of this technique applied to 
         twitter data in Minneapolis https://github.com/abeusher/geohash2kml/blob/master/minneapolis.png
         """
-        fout = open(output_file, "w", encoding="utf-8")
+        fout = open(output_file, "w", encoding="utf-8")        
         geohash_counter = {}
         for item in self.data_table:
             object_id, country_code, admin1, admin2, geohash_value, lat, lng, mgrs, placename, precision, confidence_level = item
@@ -88,7 +90,7 @@ class SuperJsonProcessor(object):
         # write out the counts into KML
         kml = KmlMaker()
         kml.locations = geohash_counter
-        kml.advanced_kml_output(output_filename=output_file, color_ramp=[300,800,1600], polygon_height=1)
+        kml.advanced_kml_output(output_filename=output_file, color_ramp=[15,25,60], polygon_height=300)
         print("Done writing kml output to", output_file)
 
     def make_statistics_table(self, output_file = ""):

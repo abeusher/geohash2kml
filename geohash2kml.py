@@ -2,10 +2,13 @@
 import geohash
 from kml_template import header, footer, box_template, red_template, orange_template, yellow_template, green_template
 
+# constants
+MAX_POLYGON_HEIGHT = 30000
+
 class KmlMaker(object):
-    def __init__(self,filename):
+    def __init__(self,filename="input.tsv"):
         self.filename = filename
-        print("walking",filename)
+        #print("walking",filename)
         self.locations = {}
 
     def makeGoogleEarthBox(self,geo):
@@ -47,7 +50,7 @@ class KmlMaker(object):
         for key,value in self.locations.items():
             value = int(value)
             if value < 1: continue
-            print (key,value)
+            #print (key,value)
             t = box_template
             poly = self.makeGoogleEarthBox(key)
             #TODO: remove this constraint for visualization
@@ -68,13 +71,14 @@ class KmlMaker(object):
         for key,value in self.locations.items():
             value = int(value)
             if value < 1: continue
-            print(key,value)
+            #print(key,value)
             t = self.get_template(value,color_ramp=color_ramp)
-            poly = self.makeGoogleEarthBox(key)
-            #TODO: remove this constraint for visualization
-            if value > 50000:
-                value = 50000
+            poly = self.makeGoogleEarthBox(key)            
             height = value * polygon_height
+            # This is a 'ceiling' value to prevent the 3d polygons from getting to tall.
+            # TODO: remove this constraint for visualization
+            if height > MAX_POLYGON_HEIGHT:
+                height = MAX_POLYGON_HEIGHT
             height = str(height)
             poly = poly.replace("elevation",height)
             t = t.replace("__name__",key)
@@ -93,4 +97,4 @@ if __name__ == "__main__":
     kml = KmlMaker(input_file)
     kml.loadLocations()
     # kml.simple_kml_output()
-    kml.advanced_kml_output(output_filename=output_file, color_ramp=[300,800,1600], polygon_height=1)
+    kml.advanced_kml_output(output_filename=output_file, color_ramp=[1,2,3], polygon_height=5000)
