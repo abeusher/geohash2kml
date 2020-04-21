@@ -3,12 +3,15 @@ import sys
 import pprint
 import time
 from geohash2kml import KmlMaker
+
 """
 Code to extract georegistration elements and:
  (1) Save them to a tab-delimited file for viewing in a Spreadsheet for
- (2) Aggregate counts of the geolocations in geohash5 as a KML output
- (3) Make a table with descriptive statistics of what was captured.
+ (2) Aggregate counts of the geolocations in geohash5 as a KML output 
+
+author: Abe U.
 """
+
 
 class SuperJsonProcessor(object):
     """
@@ -70,8 +73,12 @@ class SuperJsonProcessor(object):
             fout.write(text+"\n")
         print("Done writing TSV output to", output_file)
 
-
     def make_geohash_kml(self, output_file="default_kml_output.kml"):
+        """
+        Makes a thematic KML visual of the geolocated points, by drawing geohash5 boxes in a KML file.
+        Example of this technique applied to 
+        twitter data in Minneapolis https://github.com/abeusher/geohash2kml/blob/master/minneapolis.png
+        """
         fout = open(output_file, "w", encoding="utf-8")
         geohash_counter = {}
         for item in self.data_table:
@@ -79,26 +86,30 @@ class SuperJsonProcessor(object):
             geo5 = geohash_value[0:5]
             geohash_counter[geo5] = geohash_counter.get(geo5,0)+1            
         # write out the counts into KML
-        kml = KmlMaker(input_file)
+        kml = KmlMaker()
         kml.locations = geohash_counter
         kml.advanced_kml_output(output_filename=output_file, color_ramp=[300,800,1600], polygon_height=1)
         print("Done writing kml output to", output_file)
 
     def make_statistics_table(self, output_file = ""):
         """
-        An exercise left to the reader
+        A simple table of stats.  Looks like David T. already made this!
         """
         return
 
 
 def main():
     """
-    Create a SuperJsonProcessor object and write the three outputs that it supports.
 
-    Assumes input is a JSONL file
+    1. Reads in a filename that is supplied as sys.argv[1] or uses a default input file name
+    2. Create a SuperJsonProcessor object and writes the two outputs that it supports.
+
+    Assumption: input is a JSONL file
     """
-    
-    filename = "enriched_Clin_1_data_drop_documents.jsonl"
+    if len (sys.argv) > 1:
+        filename = sys.argv[1]
+    else: 
+        filename = "enriched_Clin_1_data_drop_documents.jsonl"
     sjp = SuperJsonProcessor()
 
     # load the data
