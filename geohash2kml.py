@@ -1,5 +1,5 @@
 ﻿import sys
-import geohash2 as geohash
+import geohash
 from kml_template import header, footer, box_template, red_template, orange_template, yellow_template, green_template
 
 # constants
